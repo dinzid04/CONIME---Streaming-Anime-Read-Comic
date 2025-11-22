@@ -1,0 +1,42 @@
+extends layout
+
+block content
+  div(class="container mx-auto px-4 py-6")
+    h1(class="text-2xl font-bold mb-4") Riwayat Tontonan
+    div(id="history-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4")
+    p(id="empty-history" class="hidden") Riwayat tontonan Anda kosong.
+
+block scripts
+  script.
+    document.addEventListener('DOMContentLoaded', () => {
+      const historyContainer = document.getElementById('history-container');
+      const emptyHistory = document.getElementById('empty-history');
+      const history = JSON.parse(localStorage.getItem('watching_history')) || [];
+
+      if (history.length > 0) {
+        history.forEach(item => {
+          const card = `
+            <div class="anime-card group relative">
+              <a href="/anime/${item.animeSlug}/episode/${item.episodeNumber}">
+                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl dark:shadow-gray-900/50 overflow-hidden transform transition-all duration-300 hover:scale-105 border border-gray-100 dark:border-gray-700">
+                  <div class="relative overflow-hidden">
+                    <img src="${item.poster}" alt="${item.animeTitle}" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                      <h3 class="font-bold text-sm text-gray-100 line-clamp-2 mb-2 transition-colors duration-200">${item.animeTitle}</h3>
+                      <p class="text-xs text-gray-300">Episode ${item.episodeNumber}</p>
+                      <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700 mt-2">
+                        <div class="bg-primary-600 h-1.5 rounded-full" style="width: ${item.progress}%"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          `;
+          historyContainer.innerHTML += card;
+        });
+      } else {
+        emptyHistory.classList.remove('hidden');
+      }
+    });
