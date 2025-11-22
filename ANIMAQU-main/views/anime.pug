@@ -1,0 +1,33 @@
+extends layout
+
+block content
+  .container.mx-auto.px-4.py-8
+    h1.text-3xl.font-bold.mb-4 Anime
+
+    section.mb-8
+      .flex.justify-between.items-center.mb-4
+        h2.text-2xl.font-bold Ongoing Anime
+        a(href="/anime/ongoing").text-primary-600.hover:underline View More
+      .grid.grid-cols-2.sm:grid-cols-3.md:grid-cols-4.lg:grid-cols-5.gap-4
+        if ongoingAnime && ongoingAnime.length > 0
+          each anime in ongoingAnime
+            .anime-card
+              a(href=`/anime/${anime.slug}`)
+                img.w-full.h-auto.rounded-lg(src=anime.poster, alt=anime.title)
+                p.mt-2.font-semibold= anime.title
+        else
+          p No ongoing anime available.
+
+    section
+      .flex.justify-between.items-center.mb-4
+        h2.text-2xl.font-bold Completed Anime
+        a(href="/anime/complete").text-primary-600.hover:underline View More
+      .grid.grid-cols-2.sm:grid-cols-3.md:grid-cols-4.lg:grid-cols-5.gap-4
+        if completedAnime && completedAnime.length > 0
+          each anime in completedAnime
+            .anime-card
+              a(href=`/anime/${anime.slug}`)
+                img.w-full.h-auto.rounded-lg(src=anime.poster, alt=anime.title)
+                p.mt-2.font-semibold= anime.title
+        else
+          p No completed anime available.
